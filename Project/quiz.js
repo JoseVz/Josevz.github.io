@@ -1,0 +1,89 @@
+var pos = 0;
+var correct = 0;
+var test, test_status, question, choice, choices, chA, chB, chC;
+
+// this is a multidimensional array with 4 inner array elements with 5 elements inside them
+var questions = [
+    {
+        question: "How many pizzas are sold every year in the world?",
+        a: "69",
+        b: "5 billion",
+        c: "100 million",
+        answer: "B"
+      },
+    {
+        question: "The Hawaiian pizza was invented where?",
+        a: "Hawaii",
+        b: "New York",
+        c: "Canada",
+        answer: "C"
+      },
+    {
+        question: "What do you call a very small pizza??",
+        a: "Pizzetta",
+        b: "Mini Pizza",
+        c: "Pizzzzaaaa",
+        answer: "A"
+      },
+    {
+        question: "Where was modern pizza invented",
+        a: "Rgv",
+        b: "New York",
+        c: "Italy",
+        answer: "C"
+      }
+    ];
+
+function get(x){
+        return document.getElementById(x);
+      }
+// this function renders a question for display on the page
+function renderQuestion(){
+    test = get("test");
+    if(pos >= questions.length){
+      test.innerHTML = "<h2>You got "+correct+" of "+questions.length+" questions correct</h2>";
+      get("test_status").innerHTML = "Test completed";
+      // resets the variable to allow users to restart the test
+      pos = 0;
+      correct = 0;
+      // stops rest of renderQuestion function running when test is completed
+      return false;
+    }
+    get("test_status").innerHTML = "Question "+(pos+1)+" of "+questions.length;
+    
+    question = questions[pos].question;
+    chA = questions[pos].a;
+    chB = questions[pos].b;
+    chC = questions[pos].c;
+    // display the question
+    test.innerHTML = "<h3>"+question+"</h3>";
+    // display the answer options
+    // the += appends to the data we started on the line above
+    test.innerHTML += "<label> <input type='radio' name='choices' value='A'> "+chA+"</label><br>";
+    test.innerHTML += "<label> <input type='radio' name='choices' value='B'> "+chB+"</label><br>";
+    test.innerHTML += "<label> <input type='radio' name='choices' value='C'> "+chC+"</label><br><br>";
+    test.innerHTML += "<button onclick='checkAnswer()'>Submit Answer</button>";
+  }
+
+  function checkAnswer(){
+    // use getElementsByName because we have an array which it will loop through
+    choices = document.getElementsByName("choices");
+    for(var i=0; i<choices.length; i++){
+      if(choices[i].checked){
+        choice = choices[i].value;
+      }
+    }
+    // checks if answer matches the correct choice
+    if(choice == questions[pos].answer){
+      //each time there is a correct answer this value increases
+      correct++;
+    }
+    // changes position of which character user is on
+    pos++;
+    // then the renderQuestion function runs again to go to next question
+    renderQuestion();
+  }
+
+  // Add event listener to call renderQuestion on page load event
+window.addEventListener("load", renderQuestion);
+    
